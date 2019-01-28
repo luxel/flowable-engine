@@ -10,9 +10,11 @@ RUN mvn -Pmysql clean package -DskipTests
 
 FROM flowable/java8_server
 
-COPY --from=0 $MODULE_DIR/flowable-ui-modeler-app/target/flowable-modeler.war /app.war
 
-ADD ${WAR_FILE} app.war
-ADD src/main/docker/wait-for-something.sh .
+ENV BUILD_DIR /build-temp
+ENV MODULE_DIR $BUILD_DIR/modules/flowable-ui-modeler
+
+COPY --from=0 $MODULE_DIR/flowable-ui-modeler-app/target/flowable-modeler.war /app.war
+COPY --from=0  $MODULE_DIR/flowable-ui-modeler-app/src/main/docker/wait-for-something.sh .
 RUN chmod +x wait-for-something.sh
 ENTRYPOINT ["java", "-jar", "/app.war", "-httpPort=8888", "-httpProtocol=org.apache.coyote.http11.Http11NioProtocol"]
