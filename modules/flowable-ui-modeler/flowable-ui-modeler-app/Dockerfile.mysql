@@ -1,0 +1,18 @@
+FROM maven:3-jdk-8-alpine
+ARG BUILD_DIR /build-temp
+ARG MODULE_DIR $BUILD_DIR/modules/flowable-ui-modeler
+
+COPY ./ $BUILD_DIR/
+WORKDIR $BUILD_DIR
+mvn -Pdistro clean install -DskipTests
+cd $MODULE_DIR
+mvn -Pmysql clean package -DskipTests
+
+FROM flowable/java8_server
+
+COPY --from=0 $MODULE_DIR/flowable-ui-modeler-app/target/flowable-modeler.war /app.war
+
+ADD ${WAR_FILE} app.war
+ADD src/main/docker/wait-for-something.sh .
+RUN chmod +x wait-for-something.sh
+ENTRYPOINT ["java", "-jar", "/app.war", "-httpPort=8888", "-httpProtocol=org.apache.coyote.http11.Http11NioProtocol"]
