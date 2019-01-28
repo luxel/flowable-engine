@@ -4,9 +4,9 @@ ENV MODULE_DIR $BUILD_DIR/modules/flowable-ui-modeler
 
 COPY ./ $BUILD_DIR/
 WORKDIR $BUILD_DIR
-mvn -Pdistro clean install -DskipTests
-cd $MODULE_DIR
-mvn -Pmysql clean package -DskipTests
+RUN mvn -Pdistro clean install -DskipTests
+WORKDIR $MODULE_DIR
+RUN mvn -Pmysql clean package -DskipTests
 
 FROM flowable/java8_server
 
