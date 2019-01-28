@@ -1,6 +1,6 @@
 FROM maven:3-jdk-8-alpine
-ARG BUILD_DIR /build-temp
-ARG MODULE_DIR $BUILD_DIR/modules/flowable-ui-modeler
+ENV BUILD_DIR /build-temp
+ENV MODULE_DIR $BUILD_DIR/modules/flowable-ui-modeler
 
 COPY ./ $BUILD_DIR/
 WORKDIR $BUILD_DIR
