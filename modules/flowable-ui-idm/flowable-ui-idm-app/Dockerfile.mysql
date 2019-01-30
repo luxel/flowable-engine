@@ -12,8 +12,9 @@ FROM flowable/java8_server:8.181
 
 ENV BUILD_DIR /build-temp
 ENV MODULE_DIR $BUILD_DIR/modules/flowable-ui-idm
+ENV JAVA_OPTS=""
 
 COPY --from=0 $MODULE_DIR/flowable-ui-idm-app/target/flowable-idm.war /app.war
 COPY --from=0  $MODULE_DIR/flowable-ui-idm-app/src/main/docker/wait-for-something.sh .
 RUN chmod +x wait-for-something.sh
-ENTRYPOINT ["java", "-jar", "/app.war"]
+ENTRYPOINT ["java", "${JAVA_OPTS}", "-jar", "/app.war"]
