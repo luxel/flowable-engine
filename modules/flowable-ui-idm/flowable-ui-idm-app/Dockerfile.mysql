@@ -16,5 +16,7 @@ ENV JAVA_OPTS=""
 
 COPY --from=0 $MODULE_DIR/flowable-ui-idm-app/target/flowable-idm.war /app.war
 COPY --from=0  $MODULE_DIR/flowable-ui-idm-app/src/main/docker/wait-for-something.sh .
+COPY --from=0 $MODULE_DIR/flowable-ui-idm-app/src/main/docker/entrypoint.sh .
 RUN chmod +x wait-for-something.sh
-ENTRYPOINT ["java", "${JAVA_OPTS}", "-jar", "/app.war"]
+RUN chmod +x entrypoint.sh
+ENTRYPOINT ["./entrypoint.sh"]

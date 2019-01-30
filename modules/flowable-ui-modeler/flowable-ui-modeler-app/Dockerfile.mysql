@@ -16,5 +16,7 @@ ENV JAVA_OPTS=""
 
 COPY --from=0 $MODULE_DIR/flowable-ui-modeler-app/target/flowable-modeler.war /app.war
 COPY --from=0  $MODULE_DIR/flowable-ui-modeler-app/src/main/docker/wait-for-something.sh .
+COPY --from=0 $MODULE_DIR/flowable-ui-modeler-app/src/main/docker/entrypoint.sh .
 RUN chmod +x wait-for-something.sh
-ENTRYPOINT ["java", "${JAVA_OPTS}", "-jar", "/app.war", "-httpPort=8888", "-httpProtocol=org.apache.coyote.http11.Http11NioProtocol"]
+RUN chmod +x entrypoint.sh
+ENTRYPOINT ["./entrypoint.sh"]
